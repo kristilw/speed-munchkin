@@ -2,3 +2,19 @@
 .content {
     text-align: center;
 }
+
+.monster-level-wrapper {
+    margin-top: 5em;   
+}
+
+.monster-level {
+    display: grid;
+    $levelSelectorSize: 2.75em;
+
+    grid-template-columns: repeat(4, $levelSelectorSize);
+    grid-gap: 0.5em;
+
+    & > * {
+        height: $levelSelectorSize;
+    }
+}

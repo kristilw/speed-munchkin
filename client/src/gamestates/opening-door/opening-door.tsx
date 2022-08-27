@@ -4,6 +4,8 @@ import { GameStateOpeningDoor, GameStateUtility } from '../../common/models/game
 import CountdownComponent from '../countdown/countdown';
 import { Game } from '../../model/game';
 
+const monsterLevels = Array.from({ length: 20 }, (v, i) => i + 1);
+
 function OpeningDoorComponent({ game }: { game: Game<GameStateOpeningDoor> }) {
   const meInGame = game.meInGame;
   if (meInGame && meInGame.myTurn) {
@@ -15,18 +17,31 @@ function OpeningDoorComponent({ game }: { game: Game<GameStateOpeningDoor> }) {
           <p>The timer is running!</p>
 
           <div>
-            <button onClick={() => game.meInGame?.emitAction({
-              action: PlayerActionType.START_FIGHT,
-              monsterLevel: 0 // user should set this value
-            })}>
-              Fight!
-            </button>
-
-            <button onClick={() => game.meInGame?.emitAction({
-              action: PlayerActionType.END_TURN
-            })}>
+            <button onClick={() =>
+              game.meInGame?.emitAction({
+                action: PlayerActionType.END_TURN
+              }
+              )}>
               End turn
             </button>
+          </div>
+
+          <div className='monster-level-wrapper'>
+            <h3>Choose monster level</h3>
+            <div className='center-content'>
+              <div className='monster-level'>
+                {
+                  monsterLevels.map((i) =>
+                    <button className='secondary' key={i} onClick={() =>
+                      game.meInGame?.emitAction({
+                        action: PlayerActionType.START_FIGHT,
+                        monsterLevel: i // user should set this value
+                      }
+                      )}>{i}</button>
+                  )
+                }
+              </div>
+            </div>
           </div>
         </div>
       </div>
