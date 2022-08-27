@@ -11,6 +11,9 @@
   font-weight: 0, 100, 200, 300, 400, 500, 600, 700, 800, 900;
 }
 
+$card-background-color: #D4AC53;
+$card-border-color: #311E1E;
+
 h1, h2, h3, h4 {
   font-family: 'Mael';
   letter-spacing: 0.1em;
@@ -61,8 +64,9 @@ body {
 
 button {
   border-radius: 0.25em;
-  border-color: #FDE5C4;
-  background-color: #F9CF8D;
+  border-width: 0.125em;
+  border-color: $card-border-color;
+  background-color: $card-background-color;
   padding: 1em;
 
   &.secondary {
