@@ -26,7 +26,7 @@ export interface GameStateFighting extends GameStateCommon {
     state: 'FIGHTNING'
     monsterPowerLevel: number;
 
-    otherPlayers: Record<Player['id'], {
+    actionsOfOtherPlayers: Array<{
         playerId: Player;
         powerLevel: number;
     }>

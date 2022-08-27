@@ -5,7 +5,7 @@ import { useMyPlayerId } from "./use-my-player-id";
 
 
 export function useMyGamePlayer(): [Player | undefined, boolean] {
-    const [gameState] = useGameState();
+    const gameState = useGameState();
     const [myPlayerId] = useMyPlayerId();
     const [player, setPlayer] = useState<Player | undefined>(undefined);
     const [myTurn, setMyTurn] = useState<boolean>(false);

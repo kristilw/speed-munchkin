@@ -4,7 +4,6 @@ import { Player } from "../common/models/game.model";
 const playerIdStoreKey = 'playerIdStoreKey';
 
 export interface PlayerGameId {
-    name: string;
     playerId: Player['id'];
     gameId: string;
 }

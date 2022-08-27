@@ -1,4 +1,3 @@
-import { useGameState } from '../utility/use-game-state';
 import FightPostComponent from './fight-post/fight-post';
 import FightComponent from './fight/fight';
 import LobbyComponent from './lobby/Lobby';
@@ -7,25 +6,26 @@ import PlayerStateHeaderComponent from './player-state-header/player-state-heade
 import './game-state.scss';
 import { GameState, GameStateUtility, Player } from '../common/models/game.model';
 import FinishedComponent from './finished/finished';
+import { useGame } from '../utility/use-game';
 
 
 function GameStateComponent() {
 
-    const [gameState] = useGameState();
+    const [game, setMyPlayerId] = useGame();
 
-    if (!gameState) {
-        return <div>No game state</div>
+    if (!game) {
+        return <div>Waiting for game-state...</div>
     }
 
     function gameIsPausedBy(state: GameState): Array<Player> {
         return GameStateUtility.GetAllPlayersInGame(state).filter((p) => p.paused);
     }
 
-    function commonWhenGameIsOn(html: any, state: GameState): any {
-        const isPaused = GameStateUtility.IsGamePaused(state) ? 'flex' : 'none';
+    function commonWhenGameIsOn(html: any): any {
+        const isPaused = GameStateUtility.IsGamePaused(game!.state) ? 'flex' : 'none';
         return (
             <div className='full-screen flex-column'>
-                <PlayerStateHeaderComponent></PlayerStateHeaderComponent>
+                <PlayerStateHeaderComponent game={game!}></PlayerStateHeaderComponent>
                 <div className='common-wrapper flex-grow'>
                     <div className='game-state'>
                         {html}
@@ -34,7 +34,7 @@ function GameStateComponent() {
                         <div>
                             <span>Game is paused by:</span>
                             <br></br>
-                            <span>{gameIsPausedBy(state).map((p) => p.name).join(', ')}</span>
+                            <span>{gameIsPausedBy(game!.state).map((p) => p.name).join(', ')}</span>
                         </div>
                     </div>
                 </div>
@@ -43,12 +43,12 @@ function GameStateComponent() {
     }
 
     const component = (() => {
-        switch (gameState?.state) {
-            case 'LOBBY': return <LobbyComponent/>;
-            case 'OPENING_DOOR': return commonWhenGameIsOn(<OpeningDoorComponent/>, gameState);
-            case 'FIGHTNING': return commonWhenGameIsOn(<FightComponent/>, gameState);
-            case 'AFTER_FIGHT': return commonWhenGameIsOn(<FightPostComponent/>, gameState);
-            case 'FINISHED': return <FinishedComponent/>;
+        switch (game.state.state) {
+            case 'LOBBY': return <LobbyComponent game={game} setMyPlayerId={setMyPlayerId}/>;
+            case 'OPENING_DOOR': return commonWhenGameIsOn(<OpeningDoorComponent game={game as any}/>);
+            case 'FIGHTNING': return commonWhenGameIsOn(<FightComponent game={game as any}/>);
+            case 'AFTER_FIGHT': return commonWhenGameIsOn(<FightPostComponent/>);
+            case 'FINISHED': return <FinishedComponent game={game as any}/>;
         }
     })();
 

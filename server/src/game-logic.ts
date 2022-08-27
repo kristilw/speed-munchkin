@@ -6,6 +6,7 @@ const playerOrder = [0, 1, 2, 3, 4, 5] as const;
 
 const TIME_CONSTS = {
     EXTRA_TIME_ON_NEW_ROUND_MS: 15000,
+    EXTRA_TIME_WHEN_FIGHT_MS: 15000,
     TIME_LEFT_START_MS: 100000
 } as const;
 
@@ -85,7 +86,8 @@ export function PlayMunchkin(
                             timeLeft_ms: state.players[nextPlayerId].timeLeft_ms + TIME_CONSTS.EXTRA_TIME_ON_NEW_ROUND_MS
                         }, state),
                         currentPlayerId: nextPlayerId,
-                        playerStartedRoundAt_epoch_ms: new Date().getTime()
+                        playerStartedRoundAt_epoch_ms: new Date().getTime(),
+                        state: 'OPENING_DOOR'
                     };
                 } else {
                     return {
@@ -123,6 +125,21 @@ export function PlayMunchkin(
                                 player.paused = metaAction.pause ?? player.paused;
         
                                 return UpdatePlayer(player, state);
+                            },
+                            START_FIGHT: (startFightAction, state) => {
+                                if (state.currentPlayerId !== startFightAction.playerId) {
+                                    return undefined;
+                                }
+
+                                return {
+                                    ...UpdatePlayer({
+                                        id: state.currentPlayerId,
+                                        timeLeft_ms: state.players[state.currentPlayerId].timeLeft_ms + TIME_CONSTS.EXTRA_TIME_WHEN_FIGHT_MS
+                                    }, state),
+                                    state: 'FIGHTNING',
+                                    monsterPowerLevel: startFightAction.monsterLevel,
+                                    actionsOfOtherPlayers: []
+                                }
                             },
                             FIGHT: (fightAction) => undefined,
                             END_TURN: (endTurnAction, state) => {

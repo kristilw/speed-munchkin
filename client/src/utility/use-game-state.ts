@@ -8,13 +8,12 @@ import { PlayerAction } from "../common/models/player-actions.model";
 const socket = io("ws://" + location.host);
 let latestGameState: GameState | undefined;
 
-export function useGameState(): [GameState | undefined, (v: PlayerAction) => void] {
+export function useGameState(): GameState | undefined {
     const [gameState, setGameState] = useState<GameState | undefined>(latestGameState);
 
     useEffect(() => {
         function listen(arg: any) {
             latestGameState = (JSON.parse(arg) as GameState);
-            console.log('game state updated');
             setGameState(latestGameState);
         }
 
@@ -24,5 +23,9 @@ export function useGameState(): [GameState | undefined, (v: PlayerAction) => voi
         };
     }, []);
 
-    return [gameState, (action) => socket.emit(WEBSOCKET_CHANNELS.PLAYER_ACTION, JSON.stringify(action))]
+    return gameState
+}
+
+export function emitPlayerAction(action: PlayerAction): void {
+    socket.emit(WEBSOCKET_CHANNELS.PLAYER_ACTION, JSON.stringify(action));
 }
