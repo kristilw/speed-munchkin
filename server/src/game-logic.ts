@@ -69,6 +69,11 @@ export function PlayMunchkin(
         
             function endTurn(state: GameState): GameState {
                 state = UpdateTimeLeftOnPlayer(state);
+
+                state = UpdatePlayer({
+                    id: state.currentPlayerId,
+                    timeLeft_ms: state.players[state.currentPlayerId].timeLeft_ms + TIME_CONSTS.EXTRA_TIME_ON_NEW_ROUND_MS
+                }, state);
         
                 const playersLeft = GameStateUtility.GetAllAlivePlayers(state);
                 if (playersLeft.length > 1) {
@@ -81,10 +86,7 @@ export function PlayMunchkin(
                         }
                     }
                     return {
-                        ...UpdatePlayer({
-                            id: nextPlayerId,
-                            timeLeft_ms: state.players[nextPlayerId].timeLeft_ms + TIME_CONSTS.EXTRA_TIME_ON_NEW_ROUND_MS
-                        }, state),
+                        ...state,
                         currentPlayerId: nextPlayerId,
                         playerStartedRoundAt_epoch_ms: new Date().getTime(),
                         state: 'OPENING_DOOR'
