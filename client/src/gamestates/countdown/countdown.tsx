@@ -6,6 +6,10 @@ function CountdownComponent(props: { timeLeft_ms: number; run: boolean }) {
     const [timeLeft_ms, setTimeLeft] = useState<number>(props.timeLeft_ms);
 
     useEffect(() => {
+        setTimeLeft(props.timeLeft_ms);
+    }, [props.timeLeft_ms]);
+
+    useEffect(() => {
         if (props.run) {
             const timer = setTimeout(() => setTimeLeft(timeLeft_ms! - 30), 30);
             return () => clearTimeout(timer);
