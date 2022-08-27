@@ -1,0 +1,14 @@
+
+.players-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.player-selection {
+    flex-grow: 1;
+    margin: 0.5em 0;
+}
+
+input {
+    margin-bottom: 1em;
+}

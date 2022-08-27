@@ -1,0 +1,71 @@
+
+@font-face{
+  font-family: "Mael";
+  src: url('../public/mael.regular.ttf');
+  font-weight: 0, 100, 200, 300, 400, 500, 600, 700, 800, 900;
+}
+
+@font-face{
+  font-family: "Mordred";
+  src: url('../public/mordred.regular.ttf');
+  font-weight: 0, 100, 200, 300, 400, 500, 600, 700, 800, 900;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Mael';
+  letter-spacing: 0.1em;
+}
+
+p, span, button {
+  font-family: 'Mordred';
+  font-size: 1.25em;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #BD957D;
+}
+
+.full-screen {
+  height: calc(100vh - 2em);
+  max-height: calc(850px - 2em);
+  width: calc(100vw - 2em);
+  max-width: calc(600px - 2em);
+  margin: 1em auto;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.center-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button {
+  border-radius: 0.25em;
+  border-color: #FDE5C4;
+  background-color: #F9CF8D;
+  padding: 1em;
+
+  &.secondary {
+    padding: 0.25em;
+  }
+}
