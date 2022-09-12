@@ -12,9 +12,11 @@ function FinishedComponent({ game }: { game: Game<GameStateFinished>} ) {
                 </h1>
                 <h2>won the game!</h2>
 
-                <button onClick={restartGame}>
-                    Create new lobby
-                </button>
+                <div className='center-content'>
+                    <button onClick={restartGame}>
+                        Create new lobby
+                    </button>
+                </div>
             </div>
         </div>
     )

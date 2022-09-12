@@ -15,16 +15,16 @@ function FightComponent({ game }: { game: Game<GameStateFighting> }) {
 
   const fightScoreDom = fightScore > 0 ? (
     <div>
-      {nameOfPlayer} currently <span className='winning'>winning</span> by {fightScore} point{fightScore === 1 ? '' : 's'}!
+      {nameOfPlayer} currently <span className='winning'>winning</span> by {fightScore} point{fightScore === 1 ? '' : 's'}.
     </div>
   ) : (
     fightScore < 0 ? (
       <div>
-        {nameOfPlayer} is currently <span className='loosing'>loosing</span> by {Math.abs(fightScore)} point{fightScore === -1 ? '' : 's'}!
+        {nameOfPlayer} currently <span className='loosing'>loosing</span> by {Math.abs(fightScore)} point{fightScore === -1 ? '' : 's'}!
       </div>
     ) : (
       <div>
-        {nameOfPlayer} is currently <span className='even'>even</span> with the monster.
+        {nameOfPlayer} currently <span className='even'>even</span> with the monster.
       </div>
     )
   )

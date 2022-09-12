@@ -59,7 +59,7 @@ function LobbyComponent({ game, setMyPlayerId }: { game: Game, setMyPlayerId: (i
         <div className='flex-row'>
           <h2 className='flex-grow'>Player {tmpSelectPlayer + 1}</h2>
           <div>
-            <button className='secondary' onClick={() => setTmpSelectPlayer(undefined)}>Tilbake</button>
+            <button className='secondary' onClick={() => setTmpSelectPlayer(undefined)}>Back</button>
           </div>
         </div>
         <span>Your name:</span>

@@ -19,7 +19,7 @@ function CountdownComponent(props: { timeLeft_ms: number; run: boolean }) {
     let timeLeft_s = '';
     if (timeLeft_ms) {
         const dsLeft = Math.ceil(timeLeft_ms/100) % 10;
-        timeLeft_s = Math.floor(timeLeft_ms/1000) + '.' + dsLeft;
+        timeLeft_s = Math.floor(timeLeft_ms/1000) + (timeLeft_ms < 30 * 1000 ?  '.' + dsLeft : '');
     }
 
     return (
