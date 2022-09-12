@@ -58,18 +58,18 @@ export function PlayMunchkin(
         
             const gameStateUpdatesBecauseOfTimer = new Subject<GameState>();
         
-            function UpdateTimeLeftOnPlayer(state: GameState): GameState {
-                const player = state.players[state.currentPlayerId];
+            function UpdateTimeLeftOnPlayers(state: GameState): GameState {
                 if (state.playerStartedRoundAt_epoch_ms) {
-                    player.timeLeft_ms = Math.max(player.timeLeft_ms - (new Date().getTime() - state.playerStartedRoundAt_epoch_ms), 0);
-                    state.playerStartedRoundAt_epoch_ms = undefined;
+                    const playersLeft = GameStateUtility.GetAllAlivePlayers(state);
+                    playersLeft.forEach((player) => {
+                        player.timeLeft_ms = Math.max(player.timeLeft_ms - (new Date().getTime() - state.playerStartedRoundAt_epoch_ms!), 0);
+                    });
                 }
+                state.playerStartedRoundAt_epoch_ms = undefined;
                 return state;
             }
         
             function endTurn(state: GameState): GameState {
-                state = UpdateTimeLeftOnPlayer(state);
-
                 state = UpdatePlayer({
                     id: state.currentPlayerId,
                     timeLeft_ms: state.players[state.currentPlayerId].timeLeft_ms + TIME_CONSTS.EXTRA_TIME_ON_NEW_ROUND_MS
@@ -158,18 +158,26 @@ export function PlayMunchkin(
                 mergeWith(gameStateUpdatesBecauseOfTimer),
                 switchMap((state) => {
                     return new Observable<GameState>((o) => {
-                        UpdateTimeLeftOnPlayer(state);
+                        state = UpdateTimeLeftOnPlayers(state);
         
                         if (GameStateUtility.IsGamePaused(state) || state.state === 'FINISHED') {
+                            GameStateUtility.GetAllAlivePlayers(state).forEach((player) =>
+                                state = UpdatePlayer({
+                                    id: player.id,
+                                    timeIsRunning: false
+                                }, state)
+                            )
                             console.warn('game paused');
                             o.next(state);
                             return () => {};
                         }
         
                         state.playerStartedRoundAt_epoch_ms = new Date().getTime();
+
+                        const currentPlayer = state.players[state.currentPlayerId];
+                        state.players[state.currentPlayerId].timeIsRunning = true;
                         o.next(state);
         
-                        const currentPlayer = state.players[state.currentPlayerId];
                         console.log('kill player ' + currentPlayer.id + ' in ' + currentPlayer.timeLeft_ms + 'ms');
                         const sub = timer(currentPlayer.timeLeft_ms).subscribe(() => {
                             console.warn('player ' + currentPlayer.id + ' is dead');
@@ -177,7 +185,8 @@ export function PlayMunchkin(
                                 endTurn(
                                     UpdatePlayer({
                                         id: currentPlayer.id,
-                                        isDead: true
+                                        isDead: true,
+                                        timeIsRunning: false
                                     }, gameState.value)
                                 )
                             );

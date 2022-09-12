@@ -5,6 +5,7 @@ export interface Player {
     powerLevel: number;
     paused: boolean;
     isDead: boolean;
+    timeIsRunning: boolean;
 
     timeLeft_ms: number;
     bonusTimeLeft_ms: number;
@@ -15,7 +16,7 @@ export interface GameStateCommon {
     updatedAt_epoch_ms: number;
     playerStartedRoundAt_epoch_ms: number | undefined;
     currentPlayerId: Player['id'];
-    players: Record<Player['id'], Player>
+    players: Record<Player['id'], Player>;
 }
 
 export interface GameStateOpeningDoor extends GameStateCommon {
