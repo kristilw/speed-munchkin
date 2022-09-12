@@ -7,6 +7,7 @@ import './game-state.scss';
 import { GameState, GameStateUtility, Player } from '../common/models/game.model';
 import FinishedComponent from './finished/finished';
 import { useGame } from '../utility/use-game';
+import { Game } from '../model/game';
 
 
 function GameStateComponent() {
@@ -21,11 +22,11 @@ function GameStateComponent() {
         return GameStateUtility.GetAllPlayersInGame(state).filter((p) => p.paused);
     }
 
-    function commonWhenGameIsOn(html: any): any {
-        const isPaused = GameStateUtility.IsGamePaused(game!.state) ? 'flex' : 'none';
+    function commonWhenGameIsOn(game: Game, html: any): any {
+        const isPaused = GameStateUtility.IsGamePaused(game.state) ? 'flex' : 'none';
         return (
-            <div className='full-screen flex-column'>
-                <PlayerStateHeaderComponent game={game!}></PlayerStateHeaderComponent>
+            <div className={'full-screen flex-column ' + (game.meInGame?.myTurn ? 'my-turn' : '') }>
+                <PlayerStateHeaderComponent game={game}></PlayerStateHeaderComponent>
                 <div className='common-wrapper flex-grow'>
                     <div className='game-state'>
                         {html}
@@ -34,7 +35,7 @@ function GameStateComponent() {
                         <div>
                             <span>Game is paused by:</span>
                             <br></br>
-                            <span>{gameIsPausedBy(game!.state).map((p) => p.name).join(', ')}</span>
+                            <span>{gameIsPausedBy(game.state).map((p) => p.name).join(', ')}</span>
                         </div>
                     </div>
                 </div>
@@ -45,9 +46,9 @@ function GameStateComponent() {
     const component = (() => {
         switch (game.state.state) {
             case 'LOBBY': return <LobbyComponent game={game} setMyPlayerId={setMyPlayerId}/>;
-            case 'OPENING_DOOR': return commonWhenGameIsOn(<OpeningDoorComponent game={game as any}/>);
-            case 'FIGHTNING': return commonWhenGameIsOn(<FightComponent game={game as any}/>);
-            case 'AFTER_FIGHT': return commonWhenGameIsOn(<FightPostComponent/>);
+            case 'OPENING_DOOR': return commonWhenGameIsOn(game, <OpeningDoorComponent game={game as any}/>);
+            case 'FIGHTNING': return commonWhenGameIsOn(game, <FightComponent game={game as any}/>);
+            case 'AFTER_FIGHT': return commonWhenGameIsOn(game, <FightPostComponent/>);
             case 'FINISHED': return <FinishedComponent game={game as any}/>;
         }
     })();
